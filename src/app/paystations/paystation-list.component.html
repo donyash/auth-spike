@@ -1,0 +1,22 @@
+<div class="container">
+    <table class='table table-striped' *ngIf='paystations && paystations.length'>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>City/State</th>
+                <th>Accepts Cash?</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr *ngFor='let paystation of paystations'>
+                    <td> <a [routerLink]="['/paystations', paystation.payStationId]">Details</a></td>
+                    <td>{{ paystation.payStationName }}</td>
+                    <td>{{ paystation.address }}</td>
+                    <td>{{ paystation.city }} {{ paystation.state }}</td>
+                    <td>{{ paystation.acceptsCash }}</td>
+                </tr>
+        </tbody>
+    </table>
+</div>

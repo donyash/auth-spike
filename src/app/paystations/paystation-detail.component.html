@@ -1,0 +1,35 @@
+<div class='panel panel-primary' *ngIf='paystation'>
+  <div class='panel-heading' style='font-size:large'>
+     {{pageTitle + ': ' + paystation[0].payStationName }}
+  </div>
+  
+  <div class='panel-body'>
+      <div class='row'>
+           <div class='col-md-6'>
+              <div class='row'>
+                  <div class='col-md-3'>Name:</div>
+                  <div class='col-md-6'>{{paystation[0].payStationName}}</div>
+              </div>
+               <div class='row'>
+                  <div class='col-md-3'>Address:</div>
+                  <div class='col-md-6'>{{paystation[0].address}}</div>
+              </div>
+              <div class='row'>
+                  <div class='col-md-3'>City/State:</div>
+                  <div class='col-md-6'>{{paystation[0].city}} {{paystation[0].state}}</div>
+              </div>
+              <div class='row'>
+                  <div class='col-md-3'>Accepts Cash?:</div>
+                  <div class='col-md-6'>{{paystation[0].acceptsCash}}</div>
+              </div>
+      </div>
+   </div>    <!-- row end -->
+  
+  
+   <div class='panel-footer'>
+      <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+          <i class='glyphicon glyphicon-chevron-left'></i> Back
+      </a>
+  </div>
+  
+</div>  <!-- panel body -->
