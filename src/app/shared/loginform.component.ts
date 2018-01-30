@@ -1,7 +1,7 @@
 import { Component, OnInit , Input} from '@angular/core';
 
 import {LoginService} from '../shared/login.service';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute, RouterStateSnapshot} from '@angular/router';
 import {UserService} from '../shared/user.service'
 import {User} from '../shared/user' 
 
@@ -9,7 +9,6 @@ import {User} from '../shared/user'
 @Component({
     selector: 'login-form',
     templateUrl: 'loginform.component.html'
-    //templateUrl: 'app/shared/loginform.component.html'
 })
 
 export class LoginFormComponent{
@@ -20,14 +19,24 @@ export class LoginFormComponent{
   private showLoading:boolean = false;
   private errorMessage:string = null;
   private userToken: string;
-
+  private redirectUrl: string = null;
 
  constructor(private userService:UserService, 
     private loginService:LoginService, 
-    private router:Router){ }
+    private router:Router, private route: ActivatedRoute){ }
 
-     ngOnInit(): void{
+     ngOnInit(state: RouterStateSnapshot): void{
       console.log('ngOnInit: LoginComponent');  
+      const param = this.route.snapshot.queryParamMap.get('returnUrl');
+     console.log('PARAM: ' + param);
+     if (param == null) {
+       //do nothing
+     }
+     else{
+        this.redirectUrl = param;
+        console.log('set this.redirectURl to: ' + this.redirectUrl);
+     }
+
       this.isLoggedIn = this.loginService.isLoggedIn(); 
       this.userToken = this.loginService.getToken();
     }
@@ -53,10 +62,17 @@ export class LoginFormComponent{
         console.log('token: ' + result.access_token);
         console.log('username: ' + result.userName);
 
-        console.log('should navigate to dashboard page');
         
         this.loginService.setLogin(result.userName,result.access_token, result.userName);
-        this.router.navigate( ['/dashboard'] );
+
+        if (this.redirectUrl == null) {
+            console.log('should navigate to dashboard page');
+            this.router.navigate( ['/dashboard'] );
+        }
+        else{
+            console.log('should navigate to: ' + this.redirectUrl);
+            this.router.navigate( [this.redirectUrl] );
+        }
     }
     onLoginError(error){
         //console.log(JSON.stringify(error));

@@ -19,6 +19,9 @@ import { PayStationListComponent } from './paystations/paystation-list.component
 import { PayStationService } from './paystations/paystation.service';
 import { PayStationDetailComponent } from './paystations/paystation-detail.component';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '../app/shared/auth/token.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +50,11 @@ import { PayStationDetailComponent } from './paystations/paystation-detail.compo
   providers: [TodoService, UserService, HeadersService, 
     LoginService, 
     PayStationService
+    ,{
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

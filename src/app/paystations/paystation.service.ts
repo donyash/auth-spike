@@ -9,6 +9,8 @@ import { IPayStation } from './paystation';
 import {HttpHeaders} from '@angular/common/http'
 import{HeadersService} from '../shared/headers.service';
 
+import { Router, ActivatedRoute} from '@angular/router';
+
 @Injectable()
 export class PayStationService  {
    private _productUrl = 'http://localhost:50779/v1/PayStation/GetAllPaymentStations';
@@ -16,7 +18,7 @@ export class PayStationService  {
 
    private _logInfo: string;
 
-  constructor(private _http: HttpClient, private _headersService: HeadersService) { }
+  constructor(private _http: HttpClient, private _headersService: HeadersService, private _router: Router) { }
 
     getPayStations(): Observable<IPayStation[]> {
        return this._http.get<IPayStation[]>(this._productUrl)
@@ -24,27 +26,14 @@ export class PayStationService  {
           .catch(this.handleError);
    }
    getPayStationById(id: string): Observable<IPayStation[]> {
-
-    const token = this._headersService.getUserToken();
-    
-    const headers = new HttpHeaders(
-        {
-            'Content-Type':'application/json; charset=utf-8', 
-            'Authorization': 'Bearer ' + token.token,
-            'Access-Control-Allow-Methods': '*',
-            'Access-Control-Allow-Origin': '*'
-        });
-
-    return this._http.get<IPayStation[]>(this._paystationUrlbyId + '?id=' + id, 
-         {headers: headers})
-        .do(data => console.log(JSON.stringify(data)))
+   //refactored to use http interceptor (headers added by interceptor)
+     return this._http.get<IPayStation[]>(this._paystationUrlbyId + '?id=' + id)
+       .do(data => console.log(JSON.stringify(data)))
        .catch(this.handleError);
 }
 
    private handleError(error: HttpErrorResponse) {
-       // TODO:send to logging infrastructure
-       //console.error(error);
-       console.error(error.message);
+       console.error('Error in paystation.service: ' + error.message);
        return Observable.throw(error.message);    //|| 'Server error');
    }
 }
