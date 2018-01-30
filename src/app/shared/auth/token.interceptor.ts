@@ -37,7 +37,7 @@ export class TokenInterceptor implements HttpInterceptor {
     }
     else{
       // this.redirectUrl = param;
-       console.log('set this.redirectURl to: ' + param[0]);
+       console.log('set this.redirectURl toXX: ' + param[0]);
     }
 
     request = request.clone({
